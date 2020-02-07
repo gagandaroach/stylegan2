@@ -18,8 +18,9 @@ import shutil
 import sys
 import time
 import traceback
-
 from enum import Enum
+
+import numpy as np
 
 from .. import util
 from ..util import EasyDict
@@ -92,7 +93,7 @@ class SubmitConfig(util.EasyDict):
         self.run_desc = ""
         self.run_dir_ignore = ["__pycache__", "*.pyproj", "*.sln", "*.suo", ".cache", ".idea", ".vs", ".vscode", "_cudacache"]
         self.run_dir_extra_files = []
-
+        
         # submit (set these)
         self.submit_target = SubmitTarget.LOCAL
         self.num_gpus = 1
@@ -250,6 +251,13 @@ def _populate_run_dir(submit_config: SubmitConfig, run_dir: str) -> None:
     files += [(os.path.join(dnnlib_module_dir_path, "submission", "internal", "run.py"), os.path.join(run_dir, "run.py"))]
 
     util.copy_files_and_create_dirs(files)
+
+    # extra directories for detailed training output
+    fake_dirs = np.arange(0,16,1)
+    for fake_dir in fake_dirs:
+        dir_path = os.path.join(run_dir, fake_dir)
+        print(f'made folder at: {dir_path}')
+        os.makedirs(os.path.join(run_dir, 'fakes', fake_dir))
 
 
 

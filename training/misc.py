@@ -57,6 +57,16 @@ def create_image_grid(images, grid_size=None):
         grid[..., y : y + img_h, x : x + img_w] = images[idx]
     return grid
 
+def save_images_individual(images, filename, drange):
+    num, img_w, img_h = images.shape[0], images.shape[-1], images.shape[-2]
+    full_path, basename = os.path.split(filename)
+    snapshot_name, ext = os.path.splitext(basename)
+    for index, image in enumerate(images):
+        image_path = os.path.join(full_path,index,f'{snapshot_name}_{index}{ext}')
+        pil_image = convert_to_pil_image(image, drange)
+        print(f'saving image @ {image_path}')
+        pil_image.save(image_path)
+
 def convert_to_pil_image(image, drange=[0,1]):
     assert image.ndim == 2 or image.ndim == 3
     if image.ndim == 3:
@@ -72,6 +82,7 @@ def convert_to_pil_image(image, drange=[0,1]):
 
 def save_image_grid(images, filename, drange=[0,1], grid_size=None):
     convert_to_pil_image(create_image_grid(images, grid_size), drange).save(filename)
+    save_images_individual(images, filename, drange)
 
 def apply_mirror_augment(minibatch):
     mask = np.random.rand(minibatch.shape[0]) < 0.5
