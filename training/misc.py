@@ -62,7 +62,7 @@ def save_images_individual(images, filename, drange):
     full_path, basename = os.path.split(filename)
     snapshot_name, ext = os.path.splitext(basename)
     for index, image in enumerate(images):
-        image_path = os.path.join(full_path,index,f'{snapshot_name}_{index}{ext}')
+        image_path = os.path.join(full_path,'fakes',str(index),f'{snapshot_name}_{index}{ext}')
         pil_image = convert_to_pil_image(image, drange)
         print(f'saving image @ {image_path}')
         pil_image.save(image_path)
