@@ -82,7 +82,9 @@ def convert_to_pil_image(image, drange=[0,1]):
 
 def save_image_grid(images, filename, drange=[0,1], grid_size=None):
     convert_to_pil_image(create_image_grid(images, grid_size), drange).save(filename)
-    save_images_individual(images, filename, drange)
+    basename = os.path.basename(filename)
+    if basename is not 'reals.png':
+        save_images_individual(images, filename, drange)
 
 def apply_mirror_augment(minibatch):
     mask = np.random.rand(minibatch.shape[0]) < 0.5
