@@ -62,7 +62,10 @@ def save_images_individual(images, filename, drange):
     full_path, basename = os.path.split(filename)
     snapshot_name, ext = os.path.splitext(basename)
     for index, image in enumerate(images):
-        image_path = os.path.join(full_path,'fakes',str(index),f'{snapshot_name}_{index}{ext}')
+        image_dir = os.path.join(full_path,'fakes',str(index))
+        if not os.path.exists(image_dir):
+            os.makedirs(image_dir)
+        image_path = os.path.join(image_dir,f'{index}_{snapshot_name}{ext}')
         pil_image = convert_to_pil_image(image, drange)
         print(f'saving image @ {image_path}')
         pil_image.save(image_path)
@@ -83,7 +86,8 @@ def convert_to_pil_image(image, drange=[0,1]):
 def save_image_grid(images, filename, drange=[0,1], grid_size=None):
     convert_to_pil_image(create_image_grid(images, grid_size), drange).save(filename)
     basename = os.path.basename(filename)
-    if basename is not 'reals.png':
+    print('basename: ', basename)
+    if basename != 'reals.png':
         save_images_individual(images, filename, drange)
 
 def apply_mirror_augment(minibatch):
