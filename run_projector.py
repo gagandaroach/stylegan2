@@ -20,6 +20,8 @@ from training import misc
 
 def project_image(proj, targets, png_prefix, num_snapshots):
     snapshot_steps = set(proj.num_steps - np.linspace(0, proj.num_steps, num_snapshots, endpoint=False, dtype=int))
+    for i in range(0,10):
+        snapshot_steps.add(i)
     misc.save_image_grid(targets, png_prefix + 'target.png', drange=[-1,1])
     proj.start(targets)
     while proj.get_cur_step() < proj.num_steps:
